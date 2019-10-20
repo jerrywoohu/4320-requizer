@@ -1,0 +1,4 @@
+{
+    "modules": "assets/modules.json",
+    "catalog": "assets/questions.json"
+}

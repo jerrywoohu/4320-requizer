@@ -1,0 +1,5 @@
+<div [innerHTML]="question.question_text" id="question-text"></div>
+<mat-form-field>
+    <input matInput autocomplete="off" placeholder="Your Answer" [(ngModel)]="response" (change)="grade()">
+</mat-form-field>
+<!-- <button (click)="grade()">Grade</button> -->

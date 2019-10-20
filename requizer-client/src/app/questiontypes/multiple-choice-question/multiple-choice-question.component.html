@@ -1,0 +1,13 @@
+<div [innerHTML]="question.question_text" id="question-text"></div>
+<mat-radio-group 
+    aria-labelledby="question-text"
+    [(ngModel)]="selected_answer"
+    (change)="grade()">
+    <mat-list dense>
+        <mat-list-item *ngFor="let option of question.options">
+            <mat-radio-button value="{{option}}" name="option.question_id">{{option}}</mat-radio-button>
+            <mat-divider></mat-divider>
+        </mat-list-item>
+    </mat-list>
+</mat-radio-group>
+<!-- <button (click)="grade()">Grade</button> -->

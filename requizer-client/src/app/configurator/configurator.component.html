@@ -1,0 +1,119 @@
+<div class="content" role="main" *ngIf="!quiz_in_progress">
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Quiz Options</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-list>
+                <mat-list-item>
+                    <mat-checkbox [(ngModel)]="options.hide_incorrect">Hide Incorrect Questions</mat-checkbox>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-form-field>
+                        <mat-label>Time Limit (0 for infinite)</mat-label>
+                        <input type="number" matInput placeholder="Time Limit" [(ngModel)]="options.time_limit">
+                    </mat-form-field>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-form-field>
+                        <mat-label>Total Questions (0 for all)</mat-label>
+                        <input type="number" matInput placeholder="Total Questions" [(ngModel)]="options.total_questions">
+                    </mat-form-field>
+                </mat-list-item>
+
+                <h3 matSubheader>Debug Tools</h3>
+                <mat-list-item>
+                    <mat-form-field>
+                        <mat-label>Lookup question by ID</mat-label>
+                        <input matInput placeholder="Lookup question by ID" [(ngModel)]="options.lookup">
+                        <button mat-raised-button (click)="lookupQuestion(options.lookup)">Lookup</button>
+                    </mat-form-field>
+                </mat-list-item>
+            </mat-list>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Select Modules</mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content>
+            <div class="button-row">
+                <button mat-raised-button color="primary">Select All</button>
+                <button mat-raised-button color="primary">Deselect All</button>
+            </div>
+
+            <mat-selection-list #modulesSelected (selectionChange)="onSelection($event, modulesSelected.selectedOptions.selected)">
+                <mat-list-option *ngFor="let module of modules" [value]="module">
+                    <h4 matLine>{{ module.identification.name }}</h4>
+                    <p matLine>{{ module.question_ids.length }} Total Questions</p>
+                    <p [hidden]="!module.identification.incomplete">Incomplete Module</p>
+                    <mat-divider></mat-divider>
+                </mat-list-option>
+
+                <h3 matSubheader>{{modulesSelected.selectedOptions.selected.length}} of {{modules.length}} modules selected</h3>
+                <h3 matSubheader>{{ catalog.length }} unique questions in database</h3>
+            </mat-selection-list>
+        </mat-card-content>
+    </mat-card>
+
+    <button mat-raised-button color="primary" (click)="generateQuiz(modulesSelected)">
+        Create Quiz
+    </button>
+
+    <!-- Terminal -->
+    <!-- <div class="terminal">
+        <pre>{{config}}</pre>
+    </div> -->
+    
+</div>
+
+<div class="content centered-content" *ngIf="quiz_in_progress">
+    <mat-card class="question-card">
+        <mat-card-header>
+            <mat-card-title>Review Quiz</mat-card-title>
+            <mat-card-subtitle>
+                {{ quiz_questions.length }} Questions
+            </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-chip-list>
+                <mat-chip *ngFor="let module of selected_modules" selectable="false">{{ module.identification.name }}</mat-chip>
+            </mat-chip-list>
+            <br>
+            <button mat-button color="warn" (click)="resetQuiz()">Return to Configurator</button>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card class="question-card" *ngFor="let quiz_question of quiz_questions; index as i">
+        <mat-card-header>
+            <mat-card-title>Question {{ i + 1 }}</mat-card-title>
+            <!-- <mat-card-subtitle>{{ quiz_question.type }}</mat-card-subtitle> -->
+
+            <mat-chip-list>
+                <mat-chip color="warn" selected *ngIf="results[i] != 1 && show_results">Incorrect</mat-chip>
+                <mat-chip *ngIf="!quiz_question.handler.correct">Original Answer Incorrect</mat-chip>
+            </mat-chip-list>
+        </mat-card-header>
+        <mat-card-content>
+            <p *ngIf="results[i] != 1 && show_results">
+                Answer: <br>
+                {{ printQuestion(quiz_question.handler.answer) }}
+            </p>
+            
+            <app-multiple-choice-question *ngIf="quiz_question.type == 'multiple_choice_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-multiple-choice-question>
+            <app-short-answer-question *ngIf="quiz_question.type == 'short_answer_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-short-answer-question>
+            <app-multiple-answers-question *ngIf="quiz_question.type == 'multiple_answers_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-multiple-answers-question>
+            <app-fill-in-multiple-blanks-question *ngIf="quiz_question.type == 'fill_in_multiple_blanks_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-fill-in-multiple-blanks-question>
+            <app-matching-question *ngIf="quiz_question.type == 'matching_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-matching-question>
+            <app-multiple-dropdowns-question *ngIf="quiz_question.type == 'multiple_dropdowns_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-multiple-dropdowns-question>
+            <app-numerical-answer-question *ngIf="quiz_question.type == 'numerical_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-numerical-answer-question>
+            <app-true-false-question *ngIf="quiz_question.type == 'true_false_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-true-false-question>
+
+        </mat-card-content>
+    </mat-card>
+
+    <button mat-raised-button color="primary" (click)="showResults()">Submit</button>
+</div>
