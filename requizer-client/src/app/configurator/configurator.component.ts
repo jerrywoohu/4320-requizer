@@ -82,10 +82,6 @@ export class ConfiguratorComponent implements OnInit {
           .subscribe((_catalog: Array<any>) => {
             this.catalog = _catalog
             for (let i = 0; i < this.catalog.length; i++) {
-              // this MUST be the last step, I can't include it in the above loop
-              // if the array gets modified after sanitization, it breaks the sanitization
-              // why sanitize? because I used raw html injection, which is unsafe
-              // but assuming Biaz isn't trying to install malware with a rogue <script> tag, this should be fine
               this.catalog[i].handler.question_text = this.sanitizer.bypassSecurityTrustHtml(this.catalog[i].handler.question_text)
             }
           })
