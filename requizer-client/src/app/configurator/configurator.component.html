@@ -5,32 +5,50 @@
             <mat-card-title>Quiz Options</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <mat-list>
+            <mat-list class="padded-list">
                 <mat-list-item>
                     <mat-checkbox [(ngModel)]="options.hide_incorrect">Hide Incorrect Questions</mat-checkbox>
                 </mat-list-item>
-                <mat-list-item>
+                <!-- <mat-list-item>
                     <mat-form-field>
-                        <mat-label>Time Limit (0 for infinite)</mat-label>
+                        <mat-label>Time limit in minutes (0 for infinite)</mat-label>
                         <input type="number" matInput placeholder="Time Limit" [(ngModel)]="options.time_limit">
                     </mat-form-field>
-                </mat-list-item>
+                </mat-list-item> -->
                 <mat-list-item>
                     <mat-form-field>
-                        <mat-label>Total Questions (0 for all)</mat-label>
+                        <mat-label>Questions per section (0 for all)</mat-label>
                         <input type="number" matInput placeholder="Total Questions" [(ngModel)]="options.total_questions">
                     </mat-form-field>
                 </mat-list-item>
-
-                <h3 matSubheader>Debug Tools</h3>
-                <mat-list-item>
-                    <mat-form-field>
-                        <mat-label>Lookup question by ID</mat-label>
-                        <input matInput placeholder="Lookup question by ID" [(ngModel)]="options.lookup">
-                        <button mat-raised-button (click)="lookupQuestion(options.lookup)">Lookup</button>
-                    </mat-form-field>
-                </mat-list-item>
             </mat-list>
+
+            <mat-expansion-panel (opened)="options.debug.debug_panel_state = true"
+                       (closed)="options.debug.debug_panel_state = false">
+                <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Debug Tools
+                </mat-panel-title>
+                <mat-panel-description>
+                    
+                </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <mat-list>
+                    <mat-list-item>
+                        <mat-form-field>
+                            <input matInput placeholder="Lookup question by ID (check console)" [(ngModel)]="options.debug.lookup">
+                            <button mat-button matSuffix (click)="lookupQuestion(options.lookup)">Lookup</button>
+                        </mat-form-field>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <mat-checkbox [(ngModel)]="options.debug.shuffle">Shuffle Questions</mat-checkbox>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <mat-checkbox [(ngModel)]="options.debug.show_ids">Show Question IDs</mat-checkbox>
+                    </mat-list-item>
+                </mat-list>
+            </mat-expansion-panel>
         </mat-card-content>
     </mat-card>
 
@@ -40,10 +58,10 @@
         </mat-card-header>
         
         <mat-card-content>
-            <div class="button-row">
-                <button mat-raised-button color="primary">Select All</button>
-                <button mat-raised-button color="primary">Deselect All</button>
-            </div>
+            <!-- <div class="button-row text-right">
+                <button mat-button color="primary">Select All</button>
+                <button mat-button color="primary">Deselect All</button>
+            </div> -->
 
             <mat-selection-list #modulesSelected (selectionChange)="onSelection($event, modulesSelected.selectedOptions.selected)">
                 <mat-list-option *ngFor="let module of modules" [value]="module">
@@ -80,6 +98,10 @@
         </mat-card-header>
         <mat-card-content>
             <mat-chip-list>
+                <mat-chip *ngIf="show_results" selectable="false" color="primary" selected>Current score: {{ calculateScore() }} biaz points out of 100</mat-chip>
+            </mat-chip-list>
+
+            <mat-chip-list>
                 <mat-chip *ngFor="let module of selected_modules" selectable="false">{{ module.identification.name }}</mat-chip>
             </mat-chip-list>
             <br>
@@ -89,7 +111,7 @@
 
     <mat-card class="question-card" *ngFor="let quiz_question of quiz_questions; index as i">
         <mat-card-header>
-            <mat-card-title>Question {{ i + 1 }}</mat-card-title>
+            <mat-card-title>Question {{ i + 1 }}<span *ngIf="options.debug.show_ids">: {{quiz_question.handler.question_id}}</span></mat-card-title>
             <!-- <mat-card-subtitle>{{ quiz_question.type }}</mat-card-subtitle> -->
 
             <mat-chip-list>
@@ -102,6 +124,8 @@
                 Answer: <br>
                 {{ printQuestion(quiz_question.handler.answer) }}
             </p>
+
+            <!-- <div [innerHTML]="quiz_question.handler.question_text"></div> -->
             
             <app-multiple-choice-question *ngIf="quiz_question.type == 'multiple_choice_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-multiple-choice-question>
             <app-short-answer-question *ngIf="quiz_question.type == 'short_answer_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-short-answer-question>
