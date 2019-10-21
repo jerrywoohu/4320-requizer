@@ -1,0 +1,17 @@
+<div [innerHTML]="question.question_text" id="question-text"></div>
+
+<mat-list>
+	<mat-list-item *ngFor="let prompt of question.prompts; index as i" class="extra-v-padding">
+		<span class="matching-prompt">{{ prompt }}</span>
+		<!-- <mat-label>Select your car (required)</mat-label> -->
+		<mat-form-field class="matching-select">
+			<mat-label>Select One</mat-label>
+			<mat-select [(ngModel)]="responses[i]" (selectionChange)="grade()">
+				<mat-option *ngFor="let option of shuffleArray(question.options)" [value]="option">
+		      	{{ option }}
+		    </mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-divider></mat-divider>
+	</mat-list-item>
+</mat-list>

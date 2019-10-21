@@ -1,0 +1,10 @@
+<div [innerHTML]="question.question_text" id="question-text"></div>
+
+<mat-list>
+	<mat-list-item *ngFor="let blank of question.answer; index as i">
+		<mat-form-field>
+			<input matInput placeholder="Blank {{i + 1}}" [(ngModel)]="responses[i]" (change)="grade()">
+		</mat-form-field>
+		<mat-divider></mat-divider>
+	</mat-list-item>
+</mat-list>

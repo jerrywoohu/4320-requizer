@@ -1,0 +1,15 @@
+<div [innerHTML]="question.question_text" id="question-text"></div>
+
+<mat-list>
+	<mat-list-item *ngFor="let blank of question.answer; index as i" class="extra-v-padding">
+		<mat-form-field>
+			<mat-label>Blank {{i + 1}}</mat-label>
+			<mat-select [(ngModel)]="responses[i]" (selectionChange)="grade()">
+				<mat-option *ngFor="let option of shuffleArray(question.options[i])" [value]="option">
+			      	{{ option }}
+			    </mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-divider></mat-divider>
+	</mat-list-item>
+</mat-list>
