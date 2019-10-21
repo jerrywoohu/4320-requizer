@@ -69,6 +69,3 @@ generated/*
 .vscode
 .DS_Store
 .Thumbs.db
-# Generated Data Files
-requizer-client/src/assets/modules.json
-requizer-client/src/assets/questions.json
