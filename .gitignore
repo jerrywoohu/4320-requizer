@@ -61,9 +61,9 @@ typings/
 .next
 
 # project folders
-quizzes/*
+quizzes/*.htm
+quizzes/*.html
 hidden
-generated/*
 
 # misc
 .vscode
