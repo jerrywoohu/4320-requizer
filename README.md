@@ -16,27 +16,23 @@ In short,
 * Open each module page 
 * Right-click > "Save As...". 
 * Format: "Webpage, HTML Only". 
-* Save each video and attempt into /quizzes/quiz_name.htm . The name you save as does not really matter.
+* Save each video and attempt into ```/quizzes/quiz_name.htm``` . The name you save as does not really matter.
 IMPORTANT: For each module you want to use, you MUST save the attempt recorded on the Module page. DO NOT save just Attempt View pages. 
 
 * run ```npm install``` to install dependencies from inside the project directory.
 * then ```node injest``` this creates the quiz question database and organizes it
-* copy files from /generated to the /requizer-client/assets folder
+* copy files from ```/generated``` to the ```/requizer-client/assets``` folder
 
 ### Running the dev server
 * ```cd requizer-client``` then ```npm install```
-* followed by ```ng serve```
-this starts a web server and launches your web browser so you can start hating yourself
+* followed by ```ng serve``` this starts a web server and launches your web browser so you can start hating yourself. If you get an error here, you may need to install Angular globally: ```npm install -g @angular/cli```
 
 * ```ng build``` builds for production
 
-If you add more quizzes to the /quizzes folder in the future, you need to run ```node injest``` again and copy the output to the correct folder.
+If you add more quizzes to the ```/quizzes``` folder in the future, you need to run ```node injest``` again and copy the output to the correct folder.
 
 ## Updating
-Make a copy of the contents of /quizzes
-Redownload the source code
-Move quizzes back into /quizzes
-run ```node injest```
+Make a copy of the contents of ```/quizzes```. Redownload the source code. Move quizzes back into ```/quizzes```. run ```node injest``` to regenerate the database
 
 ## Known Issues
 * When encountering duplicate questions, the interpreter takes the highest score. It should compare and take the newer one if both questions were answered correctly. There is actually a really large decision tree behind this. The reason why this isn't implemented yet is because the decision tree was deemed too complex and it was my bedtime.
@@ -47,3 +43,4 @@ run ```node injest```
 
 * Not every possible option is present in Matching questions. If there were originally more options in the answer bank than prompts, then the interpreter can only recover those that you used. The reason is that the entire bank isn't present in the HTML file. A fix would require you to save the quiz page while you're taking it, and not after submitting. This is too much for only a few questions, and deemed not worth it.
 
+* Answers are stored in plain text in my database. That means formatting is lost, so "2<sup>16</sup>" will lose it's superscript and become "216"

@@ -32,6 +32,7 @@ export class ConfiguratorComponent implements OnInit {
     hide_incorrect: boolean,
     time_limit: number,
     total_questions: number,
+    reverse: boolean,
     debug: {
       debug_panel_state: boolean,
       lookup: string,
@@ -52,6 +53,7 @@ export class ConfiguratorComponent implements OnInit {
       hide_incorrect: true,
       time_limit: 0,
       total_questions: 0,
+      reverse: false,
       debug: {
         debug_panel_state: false,
         lookup: '',
@@ -96,6 +98,7 @@ export class ConfiguratorComponent implements OnInit {
 
   generateQuiz() {
     this.quiz_questions = []
+
     for (let i = 0; i < this.selected_modules.length; i++) { // for each module
       
       let quiz_questions_to_push = []
@@ -115,7 +118,10 @@ export class ConfiguratorComponent implements OnInit {
         }
       }
 
+      // shuffle each module individually, rather than shuffling the entire quiz
+      // this preserves an order similar to what our actual quizzes are like
       quiz_questions_to_push = this.shuffleArray(quiz_questions_to_push)
+
 
       if (this.options.total_questions > 0) {
         if (this.options.total_questions < quiz_questions_to_push.length) {
@@ -135,9 +141,8 @@ export class ConfiguratorComponent implements OnInit {
         this.results[i] = 0
       }
 
-      // console.log(this.quiz_questions)
+      window.scroll(0,0)
     }
-    window.scroll(0,0)
   }
 
   shuffleArray(array) {
@@ -148,7 +153,7 @@ export class ConfiguratorComponent implements OnInit {
         array[j] = temp
     }
     return array
-}
+  }
 
   resetQuiz() {
     // location.reload();

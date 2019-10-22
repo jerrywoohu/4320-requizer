@@ -45,7 +45,7 @@ fs.readdir(directoryPath, (err, files) => {
 		}
 	}
 
-	merged.sort((a, b) => {return a.id - b.id})
+	merged.sort((a, b) => {return a.id - b.id}) // may not be necessary
 	fs.writeFileSync('generated/questions.json', JSON.stringify(merged));
 
 	console.log('Total questions: ' + catalog.length)
@@ -136,9 +136,7 @@ function createTimestamp(_$) {
 		} else { // probably the specific attempt page
 			// guess quiz details
 			let guess_id = _$('#update_history_form').attr('action').split('/')[4]
-			// todo: extract id from string
 			let guess_name = _$('title').html().split('Quiz History: ')[1].trim()
-			// todo: remove excess string
 
 			return {
 				name: env.current_user.display_name,
@@ -175,6 +173,7 @@ function convertDate(_date_string) {
 		'DEC': 11
 	}
 	
+	// date examples
 	// Oct 14 at 10:04pm
 	// Oct 7 at 6:09pm
 	let parts = _date_string.split(' at ')
@@ -280,6 +279,3 @@ function handleQuestion(_$, _question) {
 			break;
 	}
 }
-
-
-
