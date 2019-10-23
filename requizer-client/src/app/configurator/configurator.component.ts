@@ -19,7 +19,7 @@ import { TrueFalseQuestionComponent } from '../questiontypes/true-false-question
 export class ConfiguratorComponent implements OnInit {
 
   private modules: Array<any>
-  private config: {'modules': string, 'catalog': string}
+  private submodules: Array<any>
   private selected_modules: Array<any>
   private catalog: Array<any>
 
@@ -36,12 +36,14 @@ export class ConfiguratorComponent implements OnInit {
       debug_panel_state: boolean,
       lookup: string,
       shuffle: boolean,
-      show_ids: boolean
+      show_ids: boolean,
+      show_contributor: boolean
     }
   }
 
   constructor(private http: HttpClient, private sanitizer: DomSanitizer) {
     this.modules = []
+    this.submodules = []
     this.catalog = []
     this.selected_modules = []
     this.quiz_in_progress = false;
@@ -56,7 +58,8 @@ export class ConfiguratorComponent implements OnInit {
         debug_panel_state: false,
         lookup: '',
         shuffle: true,
-        show_ids: false
+        show_ids: false,
+        show_contributor: false
       }
     }
   }
@@ -67,23 +70,24 @@ export class ConfiguratorComponent implements OnInit {
 
   updateConfig() {
     this.http.get('assets/config.json')
-      .subscribe((data) => {
-        this.config = {
-          'modules': data['modules'],
-          'catalog':  data['catalog']
-        }
+      .subscribe((data: {'modules': string, 'submodules': string, 'catalog': string}) => {
         
-        this.http.get(this.config['modules'])
-          .subscribe((_modules: Array<any>) => {
-            this.modules = _modules
+        this.http.get(data['submodules'])
+          .subscribe((_submodules: Array<any>) => {
+            this.submodules = _submodules
           })
 
-        this.http.get(this.config['catalog'])
+        this.http.get(data['catalog'])
           .subscribe((_catalog: Array<any>) => {
             this.catalog = _catalog
             for (let i = 0; i < this.catalog.length; i++) {
               this.catalog[i].handler.question_text = this.sanitizer.bypassSecurityTrustHtml(this.catalog[i].handler.question_text)
             }
+          })
+
+        this.http.get(data['modules'])
+          .subscribe((_modules: Array<any>) => {
+            this.modules = _modules
           })
       })
   }

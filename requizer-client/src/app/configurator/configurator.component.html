@@ -29,32 +29,6 @@
                 </mat-list-item>
             </mat-list>
 
-            <mat-expansion-panel (opened)="options.debug.debug_panel_state = true"
-                       (closed)="options.debug.debug_panel_state = false">
-                <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Debug Tools
-                </mat-panel-title>
-                <mat-panel-description>
-                    
-                </mat-panel-description>
-                </mat-expansion-panel-header>
-
-                <mat-list>
-                    <mat-list-item>
-                        <mat-form-field>
-                            <input matInput placeholder="Lookup question by ID (check console)" [(ngModel)]="options.debug.lookup">
-                            <button mat-button matSuffix (click)="lookupQuestion(options.lookup)">Lookup</button>
-                        </mat-form-field>
-                    </mat-list-item>
-                    <mat-list-item>
-                        <mat-checkbox [(ngModel)]="options.debug.shuffle">Shuffle Questions</mat-checkbox>
-                    </mat-list-item>
-                    <mat-list-item>
-                        <mat-checkbox [(ngModel)]="options.debug.show_ids">Show Question IDs</mat-checkbox>
-                    </mat-list-item>
-                </mat-list>
-            </mat-expansion-panel>
         </mat-card-content>
     </mat-card>
 
@@ -69,8 +43,29 @@
                 <button mat-button color="primary">Deselect All</button>
             </div> -->
 
+            <!-- <mat-selection-list #modulesSelected (selectionChange)="onSelection($event, modulesSelected.selectedOptions.selected)">
+                    <mat-accordion>
+
+                        <mat-expansion-panel *ngFor="let module of modules">
+                            <mat-expansion-panel-header>
+                                {{ module.name }}
+                            </mat-expansion-panel-header>
+                        
+                            <mat-list-option *ngFor="let submodule of module.submodules" [value]="submodule">
+                                <h4 matLine>{{ submodule.identification.name }}</h4>
+                                <p matLine>{{ submodule.question_ids.length }} Total Questions</p>
+                                <p [hidden]="!submodule.identification.incomplete">Incomplete Module</p>
+                                <mat-divider></mat-divider>
+                            </mat-list-option>
+                        
+                        </mat-expansion-panel>
+                    
+                    </mat-accordion>
+            </mat-selection-list> -->
+
             <mat-selection-list #modulesSelected (selectionChange)="onSelection($event, modulesSelected.selectedOptions.selected)">
-                <mat-list-option *ngFor="let module of modules" [value]="module">
+
+                <mat-list-option *ngFor="let module of submodules" [value]="module">
                     <h4 matLine>{{ module.identification.name }}</h4>
                     <p matLine>{{ module.question_ids.length }} Total Questions</p>
                     <p [hidden]="!module.identification.incomplete">Incomplete Module</p>
@@ -143,7 +138,50 @@
             <app-true-false-question *ngIf="quiz_question.type == 'true_false_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-true-false-question>
 
         </mat-card-content>
+        <mat-card-footer>
+            <mat-list *ngIf="options.debug.show_contributor">
+                <h3 matSubheader>Contributor: </h3>
+                <mat-list-item>
+                    <img matListAvatar [src]="quiz_question.timestamp.avatar" [alt]="quiz_question.timestamp.name">
+                    <h3 matLine> {{ quiz_question.timestamp.name }} </h3>
+                    <p matLine>
+                        <span> Source: {{ quiz_question.timestamp.quiz.name }} </span>
+                    </p>
+                </mat-list-item>
+            </mat-list>
+        </mat-card-footer>
     </mat-card>
 
     <button mat-raised-button color="primary" (click)="showResults()">Submit</button>
+</div>
+<div class="content">
+    <mat-expansion-panel (opened)="options.debug.debug_panel_state = true"
+        (closed)="options.debug.debug_panel_state = false">
+        <mat-expansion-panel-header>
+        <mat-panel-title>
+            Debug Tools
+        </mat-panel-title>
+        <mat-panel-description>
+            
+        </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-list>
+            <mat-list-item>
+                <mat-form-field>
+                    <input matInput placeholder="Lookup question by ID (check console)" [(ngModel)]="options.debug.lookup">
+                    <button mat-button matSuffix (click)="lookupQuestion(options.debug.lookup)">Lookup</button>
+                </mat-form-field>
+            </mat-list-item>
+            <mat-list-item>
+                <mat-checkbox [(ngModel)]="options.debug.shuffle">Shuffle Questions</mat-checkbox>
+            </mat-list-item>
+            <mat-list-item>
+                <mat-checkbox [(ngModel)]="options.debug.show_ids">Show Question IDs</mat-checkbox>
+            </mat-list-item>
+            <mat-list-item>
+                <mat-checkbox [(ngModel)]="options.debug.show_contributor">Show Contributor</mat-checkbox>
+            </mat-list-item>
+        </mat-list>
+    </mat-expansion-panel>
 </div>
