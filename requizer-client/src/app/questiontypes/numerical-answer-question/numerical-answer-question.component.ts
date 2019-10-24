@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-numerical-answer-question',
   templateUrl: './numerical-answer-question.component.html',
-  styleUrls: ['./numerical-answer-question.component.scss']
+  styleUrls: ['../questiontypes.scss', './numerical-answer-question.component.scss']
 })
 export class NumericalAnswerQuestionComponent implements OnInit {
 

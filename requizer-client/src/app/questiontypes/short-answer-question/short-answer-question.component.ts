@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-short-answer-question',
   templateUrl: './short-answer-question.component.html',
-  styleUrls: ['./short-answer-question.component.scss']
+  styleUrls: ['../questiontypes.scss', '../questiontypes.scss', './short-answer-question.component.scss']
 })
 export class ShortAnswerQuestionComponent implements OnInit {
 

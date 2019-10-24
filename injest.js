@@ -18,16 +18,30 @@ const MultipleDropdownsQuesiton = require('./questiontypes/MultipleDropdowns')
 var catalog = [];
 var merged = []
 var modules_database = []
+var modules_sorted_order = []
 
+const write_locations = ['generated/', 'requizer-client/src/assets/'] // i know this is misspelled
+
+/**
+ * The main 'body' of the script
+ *
+ * This scans the quiz directory, calls a function to extract
+ * all the questions, then merges them into one database.
+ * Finally it writes it all to a few json files
+ */
 fs.readdir(directoryPath, (err, files) => {
     if (err) {
         return console.log('Unable to locate quizzes: ' + err);
     } 
-    files.forEach((file) => {
+    files.forEach((file_name) => {
         
-		let quiz = cheerio.load(fs.readFileSync('./quizzes/'+ file))
-		let quiz_results = catalogQuestions(quiz)
-		catalog = catalog.concat(quiz_results)
+        let quiz = cheerio.load(fs.readFileSync('./quizzes/'+ file_name))
+        if (file_name == 'modules_page.htm') {
+        	modules_sorted_order = createModulesSortedOrder(quiz)
+        } else {
+        	let quiz_results = catalogQuestions(quiz)
+			catalog = catalog.concat(quiz_results)
+        }
 
 	});
 
@@ -45,13 +59,14 @@ fs.readdir(directoryPath, (err, files) => {
 		}
 	}
 
-	merged.sort((a, b) => {return a.id - b.id}) // may not be necessary
-	fs.writeFileSync('generated/questions.json', JSON.stringify(merged));
+	merged.sort((a, b) => {return a.id - b.id}) // may not be necessary, but could be useful for binary search in the future
 
 	console.log('Total questions: ' + catalog.length)
 	console.log('Unique questions: ' + merged.length)
 
 	// updates modules database
+	// can probably be merged with the above loop, but kept separate for clarity
+	// this is done on the original unmerged catalog so each module can have the correct question_ids recorded
 	for (let i = 0; i < catalog.length; i++) {
 		let found_module = modules_database.findIndex(x => x.identification.id == catalog[i].timestamp.quiz.id)
 		if (found_module > -1) {
@@ -70,7 +85,39 @@ fs.readdir(directoryPath, (err, files) => {
 		}
 	}
 
-	fs.writeFileSync('generated/modules.json', JSON.stringify(modules_database));
+	// updates sort order database
+	/*
+		{
+			name: string,
+			submodules: Array<{
+				name: string,
+				id: string
+			}>
+		}
+	*/
+	for (let i = 0; i < modules_sorted_order.length; i++) {
+		for (let j = 0; j < modules_sorted_order[i].submodules.length; j++) {
+
+			// if the quiz exists in modules_database, add the data to the sorted_order submodule array
+			let found
+			if (found = modules_database.find(x => x.identification.id == modules_sorted_order[i].submodules[j].id)) {
+				modules_sorted_order[i].submodules[j].identification = found.identification
+				modules_sorted_order[i].submodules[j].question_ids = found.question_ids
+			}
+		}
+	}
+
+
+	for (let i = 0 ; i < write_locations.length; i++) {
+		// write the merged list of questions
+		fs.writeFileSync(write_locations[i] + 'questions.json', JSON.stringify(merged));
+
+		// write the database of modules
+		fs.writeFileSync(write_locations[i] + 'modules.json', JSON.stringify(modules_database));
+
+		// write the sort order for the front end
+		fs.writeFileSync(write_locations[i] + 'sortorder.json', JSON.stringify(modules_sorted_order))
+	}
 	
 	for (let i = 0; i < modules_database.length; i++) {
 		// console.log(modules_database[i].identification.name + ': ' + modules_database[i].question_ids.length)
@@ -278,4 +325,38 @@ function handleQuestion(_$, _question) {
 			return new MultipleDropdownsQuesiton(_$, _question)
 			break;
 	}
+}
+
+function createModulesSortedOrder(_$) {
+
+	let found_modules = []
+	_$('.item-group-condensed.context_module').each(function() {
+		if(_$(this).attr('id') != 'context_module_blank') {
+			let submodules = []
+			_$(this).find('ul.ig-list.items.context_module_items li.context_module_item.quiz').each(function() {
+
+				// finds quiz id
+				let quiz_id = ""
+				let class_names = _$(this).attr('class').split(' ')
+				for (let i = 0; i < class_names.length; i++) {
+					if (class_names[i].includes('Quiz_')) {
+						// found the quiz id
+						quiz_id = class_names[i].replace('Quiz_','').trim()
+					}
+				}	
+
+				submodules.push({
+					name: _$(this).find('a.for-nvda').text().trim(),
+					id: quiz_id
+				})
+			})
+			found_modules.push({
+				name: _$(this).attr('aria-label').trim(),
+				submodules: submodules
+			})
+		}
+	});
+
+	return found_modules
+
 }

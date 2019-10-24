@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-fill-in-multiple-blanks-question',
   templateUrl: './fill-in-multiple-blanks-question.component.html',
-  styleUrls: ['./fill-in-multiple-blanks-question.component.scss']
+  styleUrls: ['../questiontypes.scss', './fill-in-multiple-blanks-question.component.scss']
 })
 export class FillInMultipleBlanksQuestionComponent implements OnInit {
 
