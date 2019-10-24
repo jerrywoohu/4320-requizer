@@ -69,15 +69,17 @@ export class ConfiguratorComponent implements OnInit {
   }
 
   updateConfig() {
-    this.http.get('assets/config.json')
+    let d = new Date()
+    let d_ms = d.getTime()
+    this.http.get('assets/config.json' + "?v=" + d_ms)
       .subscribe((data: {'modules': string, 'submodules': string, 'catalog': string}) => {
         
-        this.http.get(data['submodules'])
+        this.http.get(data['submodules'] + "?v=" + d_ms)
           .subscribe((_submodules: Array<any>) => {
-            this.submodules = _submodules
+            // this.submodules = _submodules
           })
 
-        this.http.get(data['catalog'])
+        this.http.get(data['catalog'] + "?v=" + d_ms)
           .subscribe((_catalog: Array<any>) => {
             this.catalog = _catalog
             for (let i = 0; i < this.catalog.length; i++) {
@@ -85,7 +87,7 @@ export class ConfiguratorComponent implements OnInit {
             }
           })
 
-        this.http.get(data['modules'])
+        this.http.get(data['modules'] + "?v=" + d_ms)
           .subscribe((_modules: Array<any>) => {
             this.modules = _modules
           })
@@ -190,6 +192,10 @@ export class ConfiguratorComponent implements OnInit {
     }
 
     return Math.round((current_score / this.results.length) * 10000) / 100
+  }
+  
+  getCompleteQuizzes(_quizzes) {
+    return _quizzes.filter(a => a.identification)
   }
 
 }

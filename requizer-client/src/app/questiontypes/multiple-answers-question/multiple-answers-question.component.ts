@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-multiple-answers-question',
   templateUrl: './multiple-answers-question.component.html',
-  styleUrls: ['./multiple-answers-question.component.scss']
+  styleUrls: ['../questiontypes.scss', './multiple-answers-question.component.scss']
 })
 export class MultipleAnswersQuestionComponent implements OnInit {
 

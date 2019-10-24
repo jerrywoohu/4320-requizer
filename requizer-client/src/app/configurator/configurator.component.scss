@@ -1,6 +1,6 @@
 .content {
     margin: 32px auto;
-    padding: 0 16px 48px 16px;
+    padding: 0 0 44px 0;
     max-width: 960px;
 }
 
@@ -13,17 +13,36 @@
     align-items: center;
 }
 
+section {
+    margin: 16px 0;
+}
+
 mat-list-option p {
     font-size: .8rem !important;
     color: #888;
 }
 mat-card {
     margin-bottom: 16px;
+    min-width: none !important;
 }
 
-mat-list-item mat-form-field {
-    width: 100%;
+mat-expansion-panel-header.no-padding {
+    padding-left: 0;
 }
+
+mat-list-item {
+
+    &.expansion-header {
+        p {
+            font-size: .8rem !important;
+            color: #888;
+        }
+    }
+    mat-form-field {
+        width: 100%;
+    }
+}
+
 
 mat-list.padded-list mat-list-item {
     padding: 16px 0;
@@ -34,7 +53,11 @@ mat-list.padded-list mat-list-item {
 }
 
 .text-right {
-    text-align: right;
+    text-align: right !important;
+}
+
+.flex-row-reverse {
+    flex-direction: row-reverse;
 }
 
 .question_prompt {
@@ -43,6 +66,6 @@ mat-list.padded-list mat-list-item {
 
 .question-card {
     max-width: 640px;
-    min-width: 415px;
+    // min-width: 415px;
     width: 100%;
 }

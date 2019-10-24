@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-multiple-dropdowns-question',
   templateUrl: './multiple-dropdowns-question.component.html',
-  styleUrls: ['./multiple-dropdowns-question.component.scss']
+  styleUrls: ['../questiontypes.scss', './multiple-dropdowns-question.component.scss']
 })
 export class MultipleDropdownsQuestionComponent implements OnInit {
 

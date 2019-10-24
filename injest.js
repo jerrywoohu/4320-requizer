@@ -99,15 +99,10 @@ fs.readdir(directoryPath, (err, files) => {
 		for (let j = 0; j < modules_sorted_order[i].submodules.length; j++) {
 
 			// if the quiz exists in modules_database, add the data to the sorted_order submodule array
-			// otherwise get rid of it
 			let found
 			if (found = modules_database.find(x => x.identification.id == modules_sorted_order[i].submodules[j].id)) {
-				modules_sorted_order[i].submodules[j] = {
-					identification: found.identification,
-					question_ids: found.question_ids
-				}
-			} else {
-				modules_sorted_order[i].submodules.splice(j, 1);
+				modules_sorted_order[i].submodules[j].identification = found.identification
+				modules_sorted_order[i].submodules[j].question_ids = found.question_ids
 			}
 		}
 	}
