@@ -1,17 +1,18 @@
-<div class="background">
-    <mat-toolbar color="primary">
+<div [class.custom-dark-theme]="is_dark_mode" class="background">
+    <mat-toolbar>
         <span>4320 Requizzer</span>
 
         <!-- This fills the remaining space of the current row -->
         <span class="spacer"></span>
-        <span>by jerrywoohu</span>
+        <button mat-button (click)="toggleDarkMode()">
+            <mat-icon>settings_brightness</mat-icon>
+        </button>
     </mat-toolbar>
-
 
     <router-outlet></router-outlet>
 
-
     <footer>
+        Disclaimer: I do not guarantee the accuracy of the questions. Please do not use this tool as an authoritative reference.<br>
         Created by <a href="https://jerrywoohu.com">@jerrywoohu</a>&nbsp;&middot;&nbsp;
         <a href="https://github.com/jerrywoohu/4320-requizer" target="_blank" rel="noopener">
             View this project on GitHub

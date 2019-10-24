@@ -26,11 +26,6 @@ a:hover {
     color: #1976d2;
     text-decoration: none;
 }
-
-a:hover {
-    color: #125699;
-}
-
 .spacer {
     flex: 1 1 auto;
 
@@ -40,8 +35,16 @@ footer {
     padding: 16px 8px 44px 8px;
     line-height: 20px;
     text-align: center;
+    color: #888;
 }
 
 .background {
-    background-color: #efefef;
+    background-color: whitesmoke;
+}
+
+.background.custom-dark-theme {
+    background-color: #212121;
+}
+mat-toolbar {
+    letter-spacing: -.4px;
 }

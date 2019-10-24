@@ -36,7 +36,7 @@ export class MultipleDropdownsQuestionComponent implements OnInit {
 
   grade() {
     let points_received = 0
-    console.log(this.responses)
+    // console.log(this.responses)
     for (let i = 0; i < this.responses.length; i++) {
       if (this.responses[i] != "") {
         if (this.question.answer[i] == this.responses[i]) {

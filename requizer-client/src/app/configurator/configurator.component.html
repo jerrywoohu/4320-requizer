@@ -1,40 +1,5 @@
 <div class="content" role="main">
 
-    <mat-card>
-        <mat-card-content>
-                <div>Disclaimer: I do not guarantee the accuracy of the questions. Please do not use this tool as an authoritative reference.</div>
-        </mat-card-content>
-    </mat-card>
-    <mat-expansion-panel (opened)="options.debug.debug_panel_state = true"
-        (closed)="options.debug.debug_panel_state = false">
-        <mat-expansion-panel-header>
-        <mat-panel-title>
-            Debug Tools
-        </mat-panel-title>
-        <mat-panel-description>
-            
-        </mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <mat-list>
-            <mat-list-item>
-                <mat-form-field>
-                    <input matInput placeholder="Lookup question by ID (check console)" [(ngModel)]="options.debug.lookup">
-                    <button mat-button matSuffix (click)="lookupQuestion(options.debug.lookup)">Lookup</button>
-                </mat-form-field>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-checkbox [(ngModel)]="options.debug.shuffle">Shuffle Questions</mat-checkbox>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-checkbox [(ngModel)]="options.debug.show_ids">Show Question IDs</mat-checkbox>
-            </mat-list-item>
-            <mat-list-item>
-                <mat-checkbox [(ngModel)]="options.debug.show_contributor">Show Contributor</mat-checkbox>
-            </mat-list-item>
-        </mat-list>
-    </mat-expansion-panel>
-
     <section *ngIf="!quiz_in_progress">
     
         <mat-card>
@@ -74,34 +39,32 @@
                     <button mat-button color="primary">Deselect All</button>
                 </div> -->
     
-                <mat-selection-list #modulesSelected (selectionChange)="onSelection($event, modulesSelected.selectedOptions.selected)">
-                        <mat-accordion [multi]="true">
-    
-                            <div *ngFor="let module of modules">
-                                <mat-expansion-panel *ngIf="getCompleteQuizzes(module.submodules).length > 0" class="mat-elevation-z">
-                                    <mat-expansion-panel-header class="no-padding">
-                                        <!-- <mat-panel-title>   
-                                            {{ module.name }}
-                                        </mat-panel-title> -->
-                                        <mat-list-item class="expansion-header">
-                                            <h4 matLine>{{ module.name }}</h4>
-                                            <p matLine>{{ getCompleteQuizzes(module.submodules).length }} Quizzes</p>
-                                        </mat-list-item>
-                                        <!-- <mat-panel-description class="text-right flex-row-reverse">
-                                            {{ module.submodules.length }}
-                                        </mat-panel-description> -->
-                                    </mat-expansion-panel-header>
-                                    
-                                    <mat-list-option *ngFor="let submodule of getCompleteQuizzes(module.submodules)" [value]="submodule">
-                                        <h4 matLine>{{ submodule.identification.name }}</h4>
-                                        <p matLine>{{ submodule.question_ids.length }} Questions</p>
-                                        <p [hidden]="!submodule.identification.incomplete">Incomplete Module</p>
-                                        <mat-divider></mat-divider>
-                                    </mat-list-option>                            
-                                </mat-expansion-panel>
-                            </div>
-                        
-                        </mat-accordion>
+                <mat-selection-list 
+                    #modulesSelected 
+                    (selectionChange)="onSelection($event, modulesSelected.selectedOptions.selected)" 
+                    class="margin-bottom"
+                    >
+                    <mat-accordion [multi]="true">
+
+                        <div *ngFor="let module of modules">
+                            <mat-expansion-panel *ngIf="getCompleteQuizzes(module.submodules).length > 0" class="mat-elevation-z">
+                                <mat-expansion-panel-header class="no-padding">
+                                    <mat-list-item class="expansion-header">
+                                        <h4 matLine>{{ module.name }}</h4>
+                                        <p matLine>{{ getCompleteQuizzes(module.submodules).length }} Quizzes</p>
+                                    </mat-list-item>
+                                </mat-expansion-panel-header>
+                                
+                                <mat-list-option *ngFor="let submodule of getCompleteQuizzes(module.submodules)" [value]="submodule">
+                                    <h4 matLine>{{ submodule.identification.name }}</h4>
+                                    <p matLine>{{ submodule.question_ids.length }} Questions</p>
+                                    <p [hidden]="!submodule.identification.incomplete">Incomplete Module</p>
+                                    <mat-divider></mat-divider>
+                                </mat-list-option>                            
+                            </mat-expansion-panel>
+                        </div>
+                    
+                    </mat-accordion>
                 </mat-selection-list>
     
                 <!-- <mat-selection-list #modulesSelected (selectionChange)="onSelection($event, modulesSelected.selectedOptions.selected)">
@@ -117,24 +80,53 @@
                     <h3 matSubheader>{{ catalog.length }} unique questions in database</h3>
                 </mat-selection-list> -->
 
-                <p>{{modulesSelected.selectedOptions.selected.length}} of {{modules.length}} modules selected</p>
-                <p>{{ catalog.length }} unique questions in database</p>
+                <mat-chip-list>
+                    <mat-chip>{{modulesSelected.selectedOptions.selected.length}} of {{modules.length}} modules selected</mat-chip>
+                    <mat-chip>{{ catalog.length }} unique questions in database</mat-chip>
+                </mat-chip-list>
             </mat-card-content>
         </mat-card>
-    
-        <button mat-raised-button color="primary" (click)="generateQuiz(modulesSelected)">
-            Create Quiz
-        </button>
-    
-        <!-- Terminal -->
-        <!-- <div class="terminal">
-            <pre>{{config}}</pre>
-        </div> -->
+
+        <div class="custom-card-list">
+            <mat-card>
+                <mat-card-header class="custom-offset-header">
+                    <mat-icon>assignment</mat-icon>
+                    <h4>&nbsp;Quiz</h4>
+                    <p>&nbsp;like Canvas</p>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>This quiz is the most like Canvas, so exactly how you'll be tested on the material. This is a standard quiz.</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button color="primary" (click)="generateQuiz(modulesSelected)">
+                        Create Quiz
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+            <mat-card>
+                <mat-card-header class="custom-offset-header">
+                    <mat-icon>done_all</mat-icon>
+                    <h4>&nbsp;Learn</h4>
+                    <p>&nbsp;smarter</p>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>A Quizlet-style learning method that makes you master groups of questions before continuing on.</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button color="primary" (click)="generateQuiz(modulesSelected)">
+                        Start Learning
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
 
     </section>
 
     <section *ngIf="quiz_in_progress">
-        <mat-card class="question-card">
+        
+        <button mat-button color="warn" (click)="resetQuiz()"><mat-icon>arrow_back</mat-icon> Back to Configurator</button>
+
+        <mat-card class="question-card background mat-elevation-z">
             <mat-card-header>
                 <mat-card-title>Review Quiz</mat-card-title>
                 <mat-card-subtitle>
@@ -149,18 +141,22 @@
                 <mat-chip-list>
                     <mat-chip *ngFor="let module of selected_modules" selectable="false">{{ module.identification.name }}</mat-chip>
                 </mat-chip-list>
-                <br>
-                <button mat-button color="warn" (click)="resetQuiz()">Return to Configurator</button>
             </mat-card-content>
         </mat-card>
+
+        <mat-divider class="margin-bottom-huge"></mat-divider>
     
         <mat-card class="question-card" *ngFor="let quiz_question of quiz_questions; index as i">
             <mat-card-header>
-                <mat-card-title>Question {{ i + 1 }}<span *ngIf="options.debug.show_ids">: {{quiz_question.handler.question_id}}</span></mat-card-title>
+                <mat-card-title class="aligned-offset-header">
+                    Question {{ i + 1 }}
+                    <span *ngIf="options.debug.show_ids">: {{quiz_question.handler.question_id}}</span>
+                </mat-card-title>
                 <!-- <mat-card-subtitle>{{ quiz_question.type }}</mat-card-subtitle> -->
     
                 <mat-chip-list>
                     <mat-chip color="warn" selected *ngIf="results[i] != 1 && show_results">Incorrect</mat-chip>
+                    <mat-chip *ngIf="show_results">{{displayQuestionResults(results[i])}} pts</mat-chip>
                     <mat-chip *ngIf="!quiz_question.handler.correct">Original Answer Incorrect</mat-chip>
                 </mat-chip-list>
             </mat-card-header>
@@ -196,7 +192,73 @@
             </mat-card-footer>
         </mat-card>
     
-        <button mat-raised-button color="primary" (click)="showResults()">Submit</button>
+        <div class="text-center">
+            <button mat-raised-button color="primary" (click)="showResults()">Submit</button>
+        </div>
     </section>
+
+    <mat-accordion>
+        <mat-expansion-panel (opened)="options.debug.debug_panel_state = true"
+            (closed)="options.debug.debug_panel_state = false" class="mat-elevation-z background">
+            <mat-expansion-panel-header>
+            <mat-panel-title>
+                Developer Options
+            </mat-panel-title>
+            <mat-panel-description class="text-right flex-row-reverse">
+                <div *ngIf="options.debug.debug_panel_state">You are now a developer!</div>
+            </mat-panel-description>
+            </mat-expansion-panel-header>
+    
+            <mat-list>
+                <mat-list-item>
+                    <mat-form-field>
+                        <input matInput placeholder="Lookup question by ID" [(ngModel)]="options.debug.lookup">
+                        <button mat-button matSuffix (click)="lookupQuestion(options.debug.lookup)">Lookup</button>
+                    </mat-form-field>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-checkbox [(ngModel)]="options.debug.shuffle">Shuffle Questions</mat-checkbox>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-checkbox [(ngModel)]="options.debug.show_ids">Show Question IDs</mat-checkbox>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-checkbox [(ngModel)]="options.debug.show_contributor">Show Contributor</mat-checkbox>
+                </mat-list-item>
+                <mat-list-item>
+                    <button mat-button color="primary" (click)="superQuiz()">total biaz</button>
+                    <p matLine>Every module: this will definitely freeze your browser</p>
+                </mat-list-item>
+            </mat-list>
+            <div *ngIf="options.debug.terminal_output != ''" class="terminal">
+                <pre>{{ options.debug.terminal_output }}</pre>
+            </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="mat-elevation-z background">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Changelog
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <h4>10/24/19</h4>
+            <ul>
+                <li>Dark mode and other theme tweaks</li>
+                <li>This changelog is new</li>
+                <li>Question id lookup is 28% better</li>
+            </ul>
+            <mat-divider></mat-divider>
+            <h4>10/23/19</h4>
+            <ul>
+                <li>Added M10 material</li>
+                <li>Reorganized and sorted the quiz selector so there's less scrolling</li>
+                <li>Also fixed an issue with new modules not showing up (cache issue)</li>
+            </ul>
+            <mat-divider></mat-divider>
+            <h4>10/20/19</h4>
+            <ul>
+                <li>Launch</li>
+            </ul>
+        </mat-expansion-panel>
+    </mat-accordion>
     
 </div>

@@ -37,7 +37,8 @@ export class ConfiguratorComponent implements OnInit {
       lookup: string,
       shuffle: boolean,
       show_ids: boolean,
-      show_contributor: boolean
+      show_contributor: boolean,
+      terminal_output: string
     }
   }
 
@@ -59,7 +60,8 @@ export class ConfiguratorComponent implements OnInit {
         lookup: '',
         shuffle: true,
         show_ids: false,
-        show_contributor: false
+        show_contributor: false,
+        terminal_output: ""
       }
     }
   }
@@ -75,9 +77,9 @@ export class ConfiguratorComponent implements OnInit {
       .subscribe((data: {'modules': string, 'submodules': string, 'catalog': string}) => {
         
         this.http.get(data['submodules'] + "?v=" + d_ms)
-          .subscribe((_submodules: Array<any>) => {
-            // this.submodules = _submodules
-          })
+          // .subscribe((_submodules: Array<any>) => {
+          //    this.submodules = _submodules
+          // })
 
         this.http.get(data['catalog'] + "?v=" + d_ms)
           .subscribe((_catalog: Array<any>) => {
@@ -95,55 +97,60 @@ export class ConfiguratorComponent implements OnInit {
   }
 
   lookupQuestion(_id) {
-    console.log(this.catalog.find((question) => {
-      return (question.id == _id)
-    }))
+    this.options.debug.terminal_output = JSON.stringify(this.catalog.find((question) => {
+      return question.id == _id
+    }), undefined, 2)
   }
 
   generateQuiz() {
-    this.quiz_questions = []
-    for (let i = 0; i < this.selected_modules.length; i++) { // for each module
-      
-      let quiz_questions_to_push = []
-      
-      for (let j = 0; j < this.selected_modules[i].question_ids.length; j++) { // for each question in the module
-        let found = this.catalog.find((question) => {
-          return (question.id == this.selected_modules[i].question_ids[j])
-        })
+    if (this.selected_modules.length > 0) {
+      this.quiz_questions = []
+      // console.log(this.selected_modules)
+      for (let i = 0; i < this.selected_modules.length; i++) { // for each module
+        
+        let quiz_questions_to_push = []
+        
+        for (let j = 0; j < this.selected_modules[i].question_ids.length; j++) { // for each question in the module
+          let found = this.catalog.find((question) => {
+            return (question.id == this.selected_modules[i].question_ids[j])
+          })
 
-        if (found.handler.answer) { // drop all missing answers
-          if (this.options.hide_incorrect && !found.handler.correct) {
-            // if user wants to hide incorrect questions, and the question is incorrect
-            // i know this branch is empty, it was just easier to code this way
-          } else {
-            quiz_questions_to_push.push(found)
+          if (found.handler.answer) { // drop all missing answers
+            if (this.options.hide_incorrect && !found.handler.correct) {
+              // if user wants to hide incorrect questions, and the question is incorrect
+              // i know this branch is empty, it was just easier to code this way
+            } else {
+              quiz_questions_to_push.push(found)
+            }
           }
         }
-      }
 
-      quiz_questions_to_push = this.shuffleArray(quiz_questions_to_push)
+        quiz_questions_to_push = this.shuffleArray(quiz_questions_to_push)
 
-      if (this.options.total_questions > 0) {
-        if (this.options.total_questions < quiz_questions_to_push.length) {
-          quiz_questions_to_push = quiz_questions_to_push.slice(0, this.options.total_questions)
+        if (this.options.total_questions > 0) {
+          if (this.options.total_questions < quiz_questions_to_push.length) {
+            quiz_questions_to_push = quiz_questions_to_push.slice(0, this.options.total_questions)
+          }
         }
+
+        this.quiz_questions = this.quiz_questions.concat(quiz_questions_to_push)
+
       }
 
-      this.quiz_questions = this.quiz_questions.concat(quiz_questions_to_push)
+      if (this.quiz_questions.length > 0) {
+        this.quiz_in_progress = true
 
-    }
+        this.results = []
+        for (let i = 0; i < this.quiz_questions.length; i++) {
+          this.results[i] = 0
+        }
 
-    if (this.quiz_questions.length > 0) {
-      this.quiz_in_progress = true
-
-      this.results = []
-      for (let i = 0; i < this.quiz_questions.length; i++) {
-        this.results[i] = 0
+        // console.log(this.quiz_questions)
       }
-
-      // console.log(this.quiz_questions)
+      window.scroll(0,0)
+    } else {
+      alert('No quizzes selected')
     }
-    window.scroll(0,0)
   }
 
   shuffleArray(array) {
@@ -154,7 +161,7 @@ export class ConfiguratorComponent implements OnInit {
         array[j] = temp
     }
     return array
-}
+  }
 
   resetQuiz() {
     // location.reload();
@@ -196,6 +203,23 @@ export class ConfiguratorComponent implements OnInit {
   
   getCompleteQuizzes(_quizzes) {
     return _quizzes.filter(a => a.identification)
+  }
+
+  displayQuestionResults(_score) {
+    return Math.floor((_score / this.quiz_questions.length) * 10000) / 100 + " / " + Math.floor((1 / this.quiz_questions.length) * 10000) / 100
+  }
+
+  superQuiz() {
+    this.resetQuiz()
+    let total_biaz = []
+
+    for (let i = 0; i < this.modules.length; i++) {
+      let submodules = this.getCompleteQuizzes(this.modules[i].submodules)
+      total_biaz = total_biaz.concat(submodules)
+    }
+    
+    this.selected_modules = total_biaz
+    this.generateQuiz()
   }
 
 }
