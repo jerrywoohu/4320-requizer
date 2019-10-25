@@ -5,7 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-quiz',
   templateUrl: './quiz.component.html',
-  styleUrls: ['./quiz.component.scss']
+  styleUrls: ['../mystyles.scss', './quiz.component.scss']
 })
 export class QuizComponent implements OnInit {
 
@@ -74,9 +74,12 @@ export class QuizComponent implements OnInit {
     })
   }
 
+  /**
+   * Generates linear list of quiz questions
+   */
   generateQuiz() {
     if (this.selected_modules.length > 0) {
-      this.quiz_questions = []
+      let quiz_so_far = []
       // console.log(this.selected_modules)
       for (let i = 0; i < this.selected_modules.length; i++) { // for each module
         
@@ -105,12 +108,14 @@ export class QuizComponent implements OnInit {
           }
         }
 
-        this.quiz_questions = this.quiz_questions.concat(quiz_questions_to_push)
+        quiz_so_far = quiz_so_far.concat(quiz_questions_to_push)
 
       }
 
+      this.quiz_questions = quiz_so_far
+
       this.results = []
-      for (let i = 0; i < this.quiz_questions.length; i++) {
+      for (let i = 0; i < quiz_so_far.length; i++) {
         this.results[i] = 0
       }
 

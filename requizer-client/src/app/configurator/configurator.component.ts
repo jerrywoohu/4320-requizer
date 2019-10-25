@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-configurator',
   templateUrl: './configurator.component.html',
-  styleUrls: ['./configurator.component.scss']
+  styleUrls: ['../mystyles.scss', './configurator.component.scss']
 })
 export class ConfiguratorComponent implements OnInit {
 
