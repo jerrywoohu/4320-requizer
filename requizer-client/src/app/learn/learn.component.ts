@@ -19,9 +19,13 @@ export class LearnComponent implements OnInit {
 
   private results: Array<number>
   private catalog: Array<any>
-  private current_question: any
-  private current_set: Array<any>
+  
   private quiz_questions: Array<any>
+  private current_set: Array<any>
+  private recently_seen: Array<any>
+  private familiar: Array<any>
+  private mastered: Array<any>
+  private current_question: any
 
   private dev_options: {
     lookup: string,
@@ -36,9 +40,12 @@ export class LearnComponent implements OnInit {
     this.catalog = []
     this.results = []
     
-    this.current_question = null
-    this.current_set = []
     this.quiz_questions = []
+    this.current_set = []
+    this.recently_seen = []
+    this.familiar = []
+    this.mastered = []
+    this.current_question = null
 
     this.dev_options = {
       lookup: '',
@@ -130,6 +137,9 @@ export class LearnComponent implements OnInit {
     }
   }
 
+  getNextSet() {
+
+  }
 
   /**
    * Returns a shuffled copy of the same array
