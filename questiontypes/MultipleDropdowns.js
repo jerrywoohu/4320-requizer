@@ -31,6 +31,9 @@ module.exports = class MultipleDropdowns {
             found_question_text = found_question_text.replace('<span>' + this.answer[i] + '</span>', '_________')
         }
         this.question_text = found_question_text
+        while (this.question_text.includes('src="/assessment_questions/')) {
+            this.question_text = this.question_text.replace('src="/assessment_questions/', 'src="https://auburn.instructure.com/assessment_questions/')
+        }
 
         this.score = this.getScore(_$, _question)
         this.correct = (this.score == 1.0) ? true : false

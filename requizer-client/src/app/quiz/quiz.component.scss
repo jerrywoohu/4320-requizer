@@ -1,0 +1,74 @@
+mat-card {
+    margin-bottom: 16px;
+    min-width: none !important;
+    border-radius: 8px;
+    &:not([class*=mat-elevation-z]) {
+        // box-shadow: none;
+        box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    }
+}
+
+.background {
+    background-color: rgba(0,0,0,0)
+}
+
+.terminal {
+    position: relative;
+    border-radius: 6px;
+    padding-top: 45px;
+    margin-top: 8px;
+    overflow: scroll;
+    background-color: rgb(15, 15, 16);
+    &::before {
+        content: "\2022 \2022 \2022";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: rgb(58, 58, 58);
+        color: #c2c3c4;
+        width: 100%;
+        font-size: 2rem;
+        line-height: 0;
+        padding: 14px 0;
+        text-indent: 4px;
+    }
+    pre {
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+        color: white;
+        padding: 0 1rem 1rem;
+        margin: 0;
+        font-size: 12px;
+        line-height: 14px;
+    }
+}
+
+// Tools
+
+.text-right {
+    text-align: right !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.flex-row-reverse {
+    flex-direction: row-reverse;
+}
+
+.question_prompt {
+    padding: 16px 0;
+}
+
+.margin-top {
+    margin-top: 16px;
+}
+
+.margin-bottom-huge {
+    margin-bottom: 32px;
+}
+
+.margin-bottom {
+    margin-bottom: 16px;
+}

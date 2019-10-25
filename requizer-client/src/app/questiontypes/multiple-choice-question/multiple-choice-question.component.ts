@@ -1,10 +1,10 @@
-import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
-
+import { Component, OnInit, ViewEncapsulation, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-multiple-choice-question',
   templateUrl: './multiple-choice-question.component.html',
-  styleUrls: ['../questiontypes.scss', './multiple-choice-question.component.scss']
+  styleUrls: ['../questiontypes.scss', './multiple-choice-question.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class MultipleChoiceQuestionComponent implements OnInit {
 

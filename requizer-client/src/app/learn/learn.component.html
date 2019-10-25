@@ -1,6 +1,6 @@
 <button mat-button color="warn" (click)="resetQuiz()"><mat-icon>arrow_back</mat-icon> Back to Configurator</button>
 
-<mat-card class="question-card background mat-elevation-z">
+<!-- <mat-card class="question-card background mat-elevation-z">
     <mat-card-header>
         <mat-card-title>Review Quiz</mat-card-title>
         <mat-card-subtitle>
@@ -16,9 +16,9 @@
             <mat-chip *ngFor="let module of selected_modules" selectable="false">{{ module.identification.name }}</mat-chip>
         </mat-chip-list>
     </mat-card-content>
-</mat-card>
+</mat-card> -->
 
-<mat-divider class="margin-bottom-huge"></mat-divider>
+<!-- <mat-divider class="margin-bottom-huge"></mat-divider> -->
 
 <mat-card class="question-card" *ngFor="let quiz_question of quiz_questions; index as i">
     <mat-card-header>

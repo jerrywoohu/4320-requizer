@@ -47,8 +47,4 @@ If you add more quizzes to the ```/quizzes``` folder in the future, you need to 
 
 * Not every possible option is present in Matching questions. If there were originally more options in the answer bank than prompts, then the interpreter can only recover those that you used. The reason is that the entire bank isn't present in the HTML file. A fix would require you to save the quiz page while you're taking it, and not after submitting. This is too much for only a few questions, and deemed not worth it.
 
-* Some images do not load because their href is relative.
-
 * Answers are stored in plain text in my database. That means formatting is lost, so "2<sup>16</sup>" will lose it's superscript and become "216"
-
-* Answers don't wrap to multiple lines, and can get cut off if you are viewing from a small screen.

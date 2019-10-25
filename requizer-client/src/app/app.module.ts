@@ -49,6 +49,7 @@ import { MatchingQuestionComponent } from './questiontypes/matching-question/mat
 import { MultipleDropdownsQuestionComponent } from './questiontypes/multiple-dropdowns-question/multiple-dropdowns-question.component';
 import { NumericalAnswerQuestionComponent } from './questiontypes/numerical-answer-question/numerical-answer-question.component';
 import { TrueFalseQuestionComponent } from './questiontypes/true-false-question/true-false-question.component';
+import { LearnComponent } from './learn/learn.component';
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import { TrueFalseQuestionComponent } from './questiontypes/true-false-question/
     MatchingQuestionComponent,
     MultipleDropdownsQuestionComponent,
     NumericalAnswerQuestionComponent,
-    TrueFalseQuestionComponent
+    TrueFalseQuestionComponent,
+    LearnComponent
   ],
   imports: [
     BrowserModule,

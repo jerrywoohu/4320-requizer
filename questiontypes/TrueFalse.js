@@ -4,6 +4,9 @@ module.exports = class TrueFalse {
     constructor(_$, _question) {
         this.question_id = _$(_question).find('.assessment_question_id').html().trim()
         this.question_text = _$(_question).find('.question_text.user_content').html().trim()
+        while (this.question_text.includes('src="/assessment_questions/')) {
+            this.question_text = this.question_text.replace('src="/assessment_questions/', 'src="https://auburn.instructure.com/assessment_questions/')
+        }
         this.options = _$(_question).find('.answer .select_answer .answer_text').map(function() {
             return _$(this).text()
         }).get()

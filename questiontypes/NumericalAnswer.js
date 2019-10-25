@@ -7,6 +7,9 @@ module.exports = class NumericalAnswer {
 
         this.question_id = _$(_question).find('.assessment_question_id').html().trim()
         this.question_text = _$(_question).find('.question_text.user_content').html().trim()
+        while (this.question_text.includes('src="/assessment_questions/')) {
+            this.question_text = this.question_text.replace('src="/assessment_questions/', 'src="https://auburn.instructure.com/assessment_questions/')
+        }
         
         this.answer = _$(_question).find('input.numerical_question_input').val()
 
