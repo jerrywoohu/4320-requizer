@@ -5,8 +5,7 @@ import { QuizComponent } from './quiz/quiz.component'
 import { ConfiguratorComponent } from './configurator/configurator.component'
 
 const routes: Routes = [
-  {path: '', component: ConfiguratorComponent},
-  {path: 'quiz' , component: QuizComponent}
+  {path: '', component: ConfiguratorComponent}
 ];
 
 @NgModule({

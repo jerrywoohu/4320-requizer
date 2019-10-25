@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-quiz',
-  templateUrl: './quiz.component.html',
-  styleUrls: ['../mystyles.scss', './quiz.component.scss']
+  selector: 'app-learn',
+  templateUrl: './learn.component.html',
+  styleUrls: ['../mystyles.scss', './learn.component.scss']
 })
-export class QuizComponent implements OnInit {
+export class LearnComponent implements OnInit {
 
   @Input() selected_modules: Array<any>
   @Input() options: {
@@ -18,8 +18,9 @@ export class QuizComponent implements OnInit {
   @Output() quiz_done: EventEmitter<number>
 
   private results: Array<number>
-  private show_results: boolean
   private catalog: Array<any>
+  private current_question: any
+  private current_set: Array<any>
   private quiz_questions: Array<any>
 
   private dev_options: {
@@ -34,8 +35,11 @@ export class QuizComponent implements OnInit {
 
     this.catalog = []
     this.results = []
-    this.show_results = false
-    this.quiz_questions = [];
+    
+    this.current_question = null
+    this.current_set = []
+    this.quiz_questions = []
+
     this.dev_options = {
       lookup: '',
       show_ids: false,
@@ -100,8 +104,6 @@ export class QuizComponent implements OnInit {
           }
         }
 
-        if (this.options.shuffle) quiz_questions_to_push = this.shuffleArray(quiz_questions_to_push)
-
         if (this.options.number_of_questions > 0) {
           if (this.options.number_of_questions < quiz_questions_to_push.length) {
             quiz_questions_to_push = quiz_questions_to_push.slice(0, this.options.number_of_questions)
@@ -112,21 +114,26 @@ export class QuizComponent implements OnInit {
 
       }
 
-      this.quiz_questions = quiz_so_far
+      if (this.options.shuffle) quiz_so_far = this.shuffleArray(quiz_so_far)
+
+      this.quiz_questions = quiz_so_far;
 
       this.results = []
-      for (let i = 0; i < quiz_so_far.length; i++) {
+      for (let i = 0; i < this.quiz_questions.length; i++) {
         this.results[i] = 0
       }
+
+      this.current_question = this.quiz_questions.pop()
 
     } else {
       console.log('this app-quiz component started without any modules')
     }
   }
 
+
   /**
-   * 
-   * @param array anything
+   * Returns a shuffled copy of the same array
+   * @param array of anything
    */
   shuffleArray(_array: Array<any>): Array<any> {
     for (let i = _array.length - 1; i > 0; i--) {
@@ -171,14 +178,6 @@ export class QuizComponent implements OnInit {
    */
   printQuestion(_input): string {
     return JSON.stringify(_input)
-  }
-
-  /**
-   * Displays answers and results
-   */
-  showResults() {
-    this.show_results = true
-    window.scroll(0,0)
   }
 
   /**

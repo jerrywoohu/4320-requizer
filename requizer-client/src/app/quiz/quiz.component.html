@@ -1,1 +1,105 @@
-<a href="/">Return</a>
+<button mat-button color="warn" (click)="resetQuiz()"><mat-icon>arrow_back</mat-icon> Back to Configurator</button>
+
+<mat-card class="question-card background mat-elevation-z">
+    <mat-card-header>
+        <mat-card-title>Review Quiz</mat-card-title>
+        <mat-card-subtitle>
+            {{ quiz_questions.length }} Questions
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-chip-list>
+            <mat-chip *ngIf="show_results" selectable="false" color="primary" selected>Current score: {{ calculateScore() }} biaz points out of 100</mat-chip>
+        </mat-chip-list>
+
+        <mat-chip-list>
+            <mat-chip *ngFor="let module of selected_modules" selectable="false">{{ module.identification.name }}</mat-chip>
+        </mat-chip-list>
+    </mat-card-content>
+</mat-card>
+
+<mat-divider class="margin-bottom-huge"></mat-divider>
+
+<mat-card class="question-card" *ngFor="let quiz_question of quiz_questions; index as i">
+    <mat-card-header>
+        <mat-card-title class="aligned-offset-header">
+            Question {{ i + 1 }}
+            <span *ngIf="dev_options.show_ids">: {{quiz_question.handler.question_id}}</span>
+        </mat-card-title>
+        <!-- <mat-card-subtitle>{{ quiz_question.type }}</mat-card-subtitle> -->
+
+        <mat-chip-list>
+            <mat-chip color="warn" selected *ngIf="results[i] != 1 && show_results">Incorrect</mat-chip>
+            <mat-chip *ngIf="show_results">{{displayQuestionResults(results[i])}} pts</mat-chip>
+            <mat-chip *ngIf="!quiz_question.handler.correct">Original Answer Incorrect</mat-chip>
+        </mat-chip-list>
+    </mat-card-header>
+    <mat-card-content>
+        <p *ngIf="results[i] != 1 && show_results">
+            Answer: <br>
+            {{ printQuestion(quiz_question.handler.answer) }}
+        </p>
+
+        <!-- <div [innerHTML]="quiz_question.handler.question_text"></div> -->
+        
+        <app-multiple-choice-question *ngIf="quiz_question.type == 'multiple_choice_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-multiple-choice-question>
+        <app-short-answer-question *ngIf="quiz_question.type == 'short_answer_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-short-answer-question>
+        <app-multiple-answers-question *ngIf="quiz_question.type == 'multiple_answers_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-multiple-answers-question>
+        <app-fill-in-multiple-blanks-question *ngIf="quiz_question.type == 'fill_in_multiple_blanks_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-fill-in-multiple-blanks-question>
+        <app-matching-question *ngIf="quiz_question.type == 'matching_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-matching-question>
+        <app-multiple-dropdowns-question *ngIf="quiz_question.type == 'multiple_dropdowns_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-multiple-dropdowns-question>
+        <app-numerical-answer-question *ngIf="quiz_question.type == 'numerical_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-numerical-answer-question>
+        <app-true-false-question *ngIf="quiz_question.type == 'true_false_question'" [question]="quiz_question.handler" (score)="recordResult($event, i)"></app-true-false-question>
+
+    </mat-card-content>
+    <mat-card-footer>
+        <mat-list *ngIf="dev_options.show_contributor">
+            <h3 matSubheader>Contributor: </h3>
+            <mat-list-item>
+                <img matListAvatar [src]="quiz_question.timestamp.avatar" [alt]="quiz_question.timestamp.name">
+                <h3 matLine> {{ quiz_question.timestamp.name }} </h3>
+                <p matLine>
+                    <span> Source: {{ quiz_question.timestamp.quiz.name }} </span>
+                </p>
+            </mat-list-item>
+        </mat-list>
+    </mat-card-footer>
+</mat-card>
+
+<div class="text-center margin-bottom">
+    <button mat-raised-button color="primary" (click)="showResults()">Submit Quiz</button>
+</div>
+
+<mat-expansion-panel (opened)="dev_options.panel_state = true"
+    (closed)="dev_options.panel_state = false" class="mat-elevation-z background">
+    <mat-expansion-panel-header>
+    <mat-panel-title>
+        Developer Options
+    </mat-panel-title>
+    <mat-panel-description class="text-right flex-row-reverse">
+        <div *ngIf="dev_options.panel_state">You are now a developer!</div>
+    </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-list>
+        <mat-list-item>
+            <mat-form-field>
+                <input matInput placeholder="Lookup question by ID" [(ngModel)]="dev_options.lookup">
+                <button mat-button matSuffix (click)="lookupQuestion(dev_options.lookup)">Lookup</button>
+            </mat-form-field>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-checkbox [(ngModel)]="dev_options.show_ids">Show Question IDs</mat-checkbox>
+        </mat-list-item>
+        <mat-list-item>
+            <mat-checkbox [(ngModel)]="dev_options.show_contributor">Show Contributor</mat-checkbox>
+        </mat-list-item>
+        <!-- <mat-list-item>
+            <button mat-button color="primary" (click)="superQuiz()">total biaz</button>
+            <p matLine>Every module: this will definitely freeze your browser</p>
+        </mat-list-item> -->
+    </mat-list>
+    <div *ngIf="dev_options.terminal_output != ''" class="terminal">
+        <pre>{{ dev_options.terminal_output }}</pre>
+    </div>
+</mat-expansion-panel>
