@@ -1,10 +1,40 @@
 <div class="content" role="main">
 
     <section *ngIf="quiz_in_progress == 'none'">
+
+        <mat-card>
+            <mat-card-header class="custom-offset-header">
+                <mat-icon>mood_bad</mat-icon>
+                <h3>&nbsp;Misc. Tools</h3>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-expansion-panel class="mat-elevation-z">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Packet Trace Table Formatter
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <img src="assets/copytrace.png" width="200px" height="auto">
+                    <p>Copy "your answer" from a packet tracing question from Canvas and paste it into the text box below. Make sure to copy every line, even the N/A or blank ones.</p>
+                    <p>Supports 40, 46, and 50-blank questions.</p>
+                    <mat-form-field class="full-width">
+                        <textarea matInput [(ngModel)]="packetTracingTable.input" rows="5" placeholder="Paste below"></textarea>
+                    </mat-form-field>
+                    <button mat-button color="primary" (click)="formatTracingTable()">Create Table</button>
+                    <mat-divider></mat-divider>
+                    <div class="pretty-table" id="packet-table">
+                        <table [innerHTML]="packetTracingTable.table"></table>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <button mat-button color="primary" (click)="copyPacketTable()" *ngIf="packetTracingTable.table != ''">Copy Table to Clipboard</button>
+                </mat-expansion-panel>
+            </mat-card-content>
+        </mat-card>
     
         <mat-card>
-            <mat-card-header>
-                <mat-card-title>Quiz Configuration</mat-card-title>
+            <mat-card-header class="custom-offset-header">
+                <mat-icon>build</mat-icon>
+                <h3>&nbsp;Quiz Configuration</h3>
             </mat-card-header>
             <mat-card-content>
                 <mat-list>
@@ -25,6 +55,10 @@
                             <mat-list-item>
                                 <mat-checkbox [(ngModel)]="options.shuffle">Shuffle Questions</mat-checkbox>
                             </mat-list-item>
+                            <mat-list-item>
+                                <button mat-button color="primary" (click)="superQuiz()">total biaz</button>
+                                <p matLine>Load every question: this will definitely freeze your browser</p>
+                            </mat-list-item>
                         </mat-list>
                     </mat-expansion-panel>
                 </mat-list>
@@ -32,8 +66,9 @@
         </mat-card>
     
         <mat-card>
-            <mat-card-header>
-                <mat-card-title>{{modulesSelected.selectedOptions.selected.length}} of {{modules.length}} modules selected</mat-card-title>
+            <mat-card-header class="custom-offset-header">
+                <mat-icon>playlist_add_check</mat-icon>
+                <h3>&nbsp;{{modulesSelected.selectedOptions.selected.length}} Modules Selected</h3>
             </mat-card-header>
             
             <mat-card-content>
@@ -66,6 +101,8 @@
                                 </mat-list-option>                            
                             </mat-expansion-panel>
                         </div>
+
+                        <p class="text-gray">Want to submit your quizzes and help out your classmates? DM me (jerry hu) on GroupMe or Canvas and I'll let you know how to contribute! Contributions can be done anonymously.</p>
                     
                     </mat-accordion>
                 </mat-selection-list>
@@ -94,7 +131,6 @@
                 <mat-card-header class="custom-offset-header">
                     <mat-icon>assignment</mat-icon>
                     <h4>&nbsp;Quiz</h4>
-                    <p>&nbsp;like Canvas</p>
                 </mat-card-header>
                 <mat-card-content>
                     <p>This quiz is the most like Canvas, so exactly like how you'll be tested on the material. This is a standard quiz.</p>
@@ -105,21 +141,21 @@
                     </button>
                 </mat-card-actions>
             </mat-card>
-            <mat-card>
+            <!-- <mat-card>
                 <mat-card-header class="custom-offset-header">
                     <mat-icon>done_all</mat-icon>
                     <h4>&nbsp;Learn</h4>
                     <p>&nbsp;smarter</p>
                 </mat-card-header>
                 <mat-card-content>
-                    <p><b>Coming Soon</b> A Quizlet-style learning method that makes you master groups of questions before continuing on.</p>
+                    <p>A Quizlet-style learning method that makes you master groups of questions before continuing on.</p>
                 </mat-card-content>
                 <mat-card-actions>
                     <button mat-button color="primary" (click)="learnQuiz(modulesSelected)" disabled>
-                        Start Learning
+                        Coming Soon
                     </button>
                 </mat-card-actions>
-            </mat-card>
+            </mat-card> -->
         </div>
 
     </section>
@@ -142,7 +178,15 @@
                 Changelog
             </mat-panel-title>
         </mat-expansion-panel-header>
-        <h4>10/24/19</h4>
+        <h4>10/31/19 - Ghastly Edition</h4>
+        <ul>
+            <li>Packet Tracing Tools</li>
+            <li>Dark mode now respects system setting 👻</li>
+            <li>Bugfix: inaccurate module count in module select card</li>
+        </ul>
+        <mat-divider></mat-divider>
+
+        <h4>10/24/19 - Driving On Mars Edition</h4>
         <ul>
             <li>Dark mode and other theme tweaks</li>
             <li>Bugfix: Answers now wrap</li>
@@ -151,6 +195,7 @@
             <li>Question id lookup is 28% better</li>
         </ul>
         <mat-divider></mat-divider>
+        
         <h4>10/23/19</h4>
         <ul>
             <li>Added M10 material</li>
@@ -158,6 +203,7 @@
             <li>Also fixed an issue with new modules not showing up (cache issue)</li>
         </ul>
         <mat-divider></mat-divider>
+        
         <h4>10/20/19</h4>
         <ul>
             <li>Launch</li>

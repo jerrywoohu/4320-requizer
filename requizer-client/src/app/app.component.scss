@@ -42,9 +42,17 @@ footer {
     background-color: whitesmoke;
 }
 
+.full-height {
+    min-height: 100vh;
+}
+
 .background.custom-dark-theme {
     background-color: #212121;
 }
 mat-toolbar {
     letter-spacing: -.4px;
+}
+
+.text-light {
+    font-weight: 300 !important;
 }

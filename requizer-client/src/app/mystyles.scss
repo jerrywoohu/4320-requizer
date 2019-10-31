@@ -33,7 +33,7 @@ mat-expansion-panel-header.no-padding {
 mat-card-header {
     align-items: center;
     &.custom-offset-header {
-        margin-left: -30px;
+        margin-left: -15px;
         margin-top: -10px;
     }
     .aligned-offset-header {
@@ -99,6 +99,22 @@ mat-list-item {
 
 .margin-bottom {
     margin-bottom: 16px;
+}
+
+.text-light {
+    font-weight: 300 !important;
+}
+
+.text-gray {
+    color: gray;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.pretty-table {
+    overflow: scroll;
 }
 
 .terminal {

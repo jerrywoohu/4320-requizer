@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
   selector: 'app-configurator',
@@ -11,6 +12,7 @@ export class ConfiguratorComponent implements OnInit {
   private modules: Array<any>
   private selected_modules: Array<any>
   private quiz_in_progress: string
+  private packetTracingTable: {input: string, table: string}
 
   private options: {
     hide_incorrect: boolean,
@@ -22,6 +24,10 @@ export class ConfiguratorComponent implements OnInit {
     this.modules = []
     this.quiz_in_progress = 'none';
     this.selected_modules = []
+    this.packetTracingTable = {
+      input: '', 
+      table: ''
+    }
 
     this.options =  {
       hide_incorrect: true,
@@ -97,6 +103,74 @@ export class ConfiguratorComponent implements OnInit {
     
     this.selected_modules = total_biaz
     this.normalQuiz()
+  }
+
+  formatTracingTable() {
+    let lines = this.packetTracingTable.input.split('\n')
+    let output = []
+    for (let i = 0; i < lines.length; i++) {
+      if (!lines[i].includes('Answer') && !lines[i].includes(':')) {
+        output.push(lines[i].trim())
+      }
+    }
+
+    let table = ''
+    table += '<tr><th>Seg.</th><th>MAC D.</th><th>MAC S.</th><th>Type</th><th>IP D.</th><th>IP S.</th><th>Prot #</th><th>Port D.</th><th>Port S.</th><th>Flags</th></tr>'
+    
+    if (output.length == 50 || output.length == 40) {
+      for (let i = 0; i < output.length / 10; i++) {
+        table += '<tr>'
+        for (let j = 0; j < 10; j++) {
+          table += '<td>' + output[(i * 10) + j] + '</td>'
+        }
+        table += '</tr>'
+      }
+    } else if (output.length == 46) {
+      for (let i = 0; i < 5; i++) {
+        table += '<tr>'
+        if (i == 0) {
+          table += '<td>' + output[0] + '</td>'
+          for (let j = 0; j < 9; j++) {
+            // first row
+            table += '<td>' + output[j + 1] + '</td>'
+          }
+        } else {
+          table += '<td>s</td>'
+          for (let j = 0; j < 9; j++) {
+            table += '<td>' + output[(i * 9) + j + 1] + '</td>'
+          }
+        }
+        table += '</tr>'
+      }
+    } else {
+      table += '<tr><td>Invalid Input</td></tr>'
+    }
+
+    // this.copyToClipboard(table)
+
+    this.packetTracingTable.table = table
+  }
+
+  copyPacketTable() {
+    this.copyElToClipboard(document.getElementById('packet-table'))
+  }
+
+  copyElToClipboard(el) {
+    let body = document.body, range, sel;
+    if (document.createRange && window.getSelection) {
+        range = document.createRange();
+        sel = window.getSelection();
+        sel.removeAllRanges();
+        try {
+            range.selectNodeContents(el);
+            sel.addRange(range);
+        } catch (e) {
+            range.selectNode(el);
+            sel.addRange(range);
+        }
+        document.execCommand("copy");
+
+    }
   }
 
 }

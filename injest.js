@@ -36,8 +36,12 @@ fs.readdir(directoryPath, (err, files) => {
     files.forEach((file_name) => {
         
         let quiz = cheerio.load(fs.readFileSync('./quizzes/'+ file_name))
-        if (file_name == 'modules_page.htm') {
+        if (file_name == 'modules_page.htm' || file_name == 'modules_page.html') {
         	modules_sorted_order = createModulesSortedOrder(quiz)
+        } else if (file_name.charAt(0) == '_') {
+        	console.log('this is anon: ' + file_name)
+        	let quiz_results = catalogQuestions(quiz, true)
+			catalog = catalog.concat(quiz_results)
         } else {
         	let quiz_results = catalogQuestions(quiz)
 			catalog = catalog.concat(quiz_results)
@@ -153,7 +157,7 @@ fs.readdir(directoryPath, (err, files) => {
  * 
  * @param {*} _$ : Cheerio/jQuery Document
  */
-function createTimestamp(_$) {
+function createTimestamp(_$, anon) {
 	let env = findEnv(_$);
 
 	// some quizzes might get saved from the 'attempt history page'
@@ -168,34 +172,64 @@ function createTimestamp(_$) {
 			if (inside.includes('Submitted')) date_submitted = inside.replace('Submitted ', '').trim();
 		})
 		if (env.QUIZ) { // probably the module page
-			return {
-				name: env.current_user.display_name,
-				user_id: env.current_user.id,
-				avatar: env.current_user.avatar_image_url,
-				quiz: {
-					id: env.QUIZ.id,
-					name: env.QUIZ.title.trim(),
-					desc: env.QUIZ.description,
-					incomplete: false
-				},
-				submitted: convertDate(date_submitted)
+			if (anon) {
+				return {
+					name: 'Anonymous Contributor',
+					user_id: '',
+					avatar: 'https://hubot.github.com/assets/images/layout/hubot-avatar@2x.png',
+					quiz: {
+						id: env.QUIZ.id,
+						name: env.QUIZ.title.trim(),
+						desc: env.QUIZ.description,
+						incomplete: false
+					},
+					submitted: convertDate(date_submitted)
+				}
+			} else {
+				return {
+					name: env.current_user.display_name,
+					user_id: env.current_user.id,
+					avatar: env.current_user.avatar_image_url,
+					quiz: {
+						id: env.QUIZ.id,
+						name: env.QUIZ.title.trim(),
+						desc: env.QUIZ.description,
+						incomplete: false
+					},
+					submitted: convertDate(date_submitted)
+				}
 			}
 		} else { // probably the specific attempt page
 			// guess quiz details
 			let guess_id = _$('#update_history_form').attr('action').split('/')[4]
 			let guess_name = _$('title').html().split('Quiz History: ')[1].trim()
 
-			return {
-				name: env.current_user.display_name,
-				user_id: env.current_user.id,
-				avatar: env.current_user.avatar_image_url,
-				quiz: {
-					id: guess_id,
-					name: guess_name,
-					// desc: null, // not available
-					incomplete: true
-				},
-				submitted: convertDate(date_submitted)
+			if (anon) {
+				return {
+					name: 'Anonymous Contributor',
+					user_id: '',
+					avatar: 'https://hubot.github.com/assets/images/layout/hubot-avatar@2x.png',
+					quiz: {
+						id: guess_id,
+						name: guess_name,
+						// desc: null, // not available
+						incomplete: true
+					},
+					submitted: convertDate(date_submitted)
+				}
+			} else {
+				return {
+					name: env.current_user.display_name,
+					user_id: env.current_user.id,
+					avatar: env.current_user.avatar_image_url,
+					quiz: {
+						id: guess_id,
+						name: guess_name,
+						// desc: null, // not available
+						incomplete: true
+					},
+					submitted: convertDate(date_submitted)
+				}
 			}
 		}
 	} else {
@@ -268,10 +302,10 @@ function findEnv(_$) {
 	return false
 }
 
-function catalogQuestions(_$) {
+function catalogQuestions(_$, anon) {
 	let questions = _$('#questions .question_holder')
 	let results = []
-	let timestamp = createTimestamp(_$)
+	let timestamp = createTimestamp(_$, anon)
 
 	for (let i = 0; i < questions.length; i++) {
 		results.push({
