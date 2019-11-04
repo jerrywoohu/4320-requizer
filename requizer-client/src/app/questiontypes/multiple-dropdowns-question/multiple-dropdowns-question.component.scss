@@ -1,3 +1,19 @@
 .extra-v-padding {
 	padding: 8px 0;
 }
+
+.flex-parent {
+	display: flex;
+	flex-flow: row wrap;
+	width: 100%;
+}
+
+.flex-child {
+	width: calc(10% - 2px);
+	padding: 4px 0;
+	margin: auto;
+	border: 0.5px solid gray;
+	select {
+		width: 100%;
+	}
+}

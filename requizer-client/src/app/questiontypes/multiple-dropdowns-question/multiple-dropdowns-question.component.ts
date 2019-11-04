@@ -31,7 +31,12 @@ export class MultipleDropdownsQuestionComponent implements OnInit {
   }
 
   shuffleArray(array) {
+    // incomplete
     return array
+  }
+
+  returnSlice(array: Array<any>, start: number, end: number) {
+    return array.slice(start, end)
   }
 
   grade() {
@@ -47,7 +52,7 @@ export class MultipleDropdownsQuestionComponent implements OnInit {
       }
     }
     points_received = (points_received >= 0) ? points_received : 0
-    this.score.emit(points_received)
+    this.score.emit(Math.round(points_received * 100) / 100)
   }
 
 }

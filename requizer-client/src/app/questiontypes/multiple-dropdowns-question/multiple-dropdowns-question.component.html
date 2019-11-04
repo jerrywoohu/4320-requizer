@@ -1,10 +1,13 @@
 <div [innerHTML]="question.question_text" id="question-text"></div>
 
-<mat-list>
+<div>Important requizzer step: Answer in the boxes below, not the ones above!</div>
+
+<mat-list *ngIf="question.answer.length != 50 && question.answer.length != 40 && question.answer.length != 46">
 	<mat-list-item *ngFor="let blank of question.answer; index as i" class="extra-v-padding">
 		<mat-form-field>
 			<mat-label>Blank {{i + 1}}</mat-label>
 			<mat-select [(ngModel)]="responses[i]" (selectionChange)="grade()">
+				<mat-option value="">[Select]</mat-option>
 				<mat-option *ngFor="let option of shuffleArray(question.options[i])" [value]="option">
 			      	{{ option }}
 			    </mat-option>
@@ -13,3 +16,130 @@
 		<mat-divider></mat-divider>
 	</mat-list-item>
 </mat-list>
+
+<div class="extra-v-padding flex-parent" *ngIf="question.answer.length == 50 || question.answer.length == 40">
+	<div class="flex-child">
+		Seg.
+	</div>
+	<div class="flex-child">
+		MAC D.
+	</div>
+	<div class="flex-child">
+		MAC S.
+	</div>
+	<div class="flex-child">
+		Type
+	</div>
+	<div class="flex-child">
+		IP D.
+	</div>
+	<div class="flex-child">
+		IP S.
+	</div>
+	<div class="flex-child">
+		Prot #
+	</div>
+	<div class="flex-child">
+		Port D.
+	</div>
+	<div class="flex-child">
+		Port S.
+	</div>
+	<div class="flex-child">
+		Flags
+	</div>
+	<div class="flex-child" *ngFor="let blank of question.answer; index as i">
+		<select [(ngModel)]="responses[i]" (change)="grade()">
+			<option value="">[Select]</option>
+			<option *ngFor="let option of shuffleArray(question.options[i])" [value]="option">
+				{{ option }}
+			</option>
+		</select>
+	</div>
+</div>
+
+<!-- I really hate this solution, but it was easy -->
+<div class="extra-v-padding flex-parent" *ngIf="question.answer.length == 46">
+	<div class="flex-child">
+		Seg.
+	</div>
+	<div class="flex-child">
+		MAC D.
+	</div>
+	<div class="flex-child">
+		MAC S.
+	</div>
+	<div class="flex-child">
+		Type
+	</div>
+	<div class="flex-child">
+		IP D.
+	</div>
+	<div class="flex-child">
+		IP S.
+	</div>
+	<div class="flex-child">
+		Prot #
+	</div>
+	<div class="flex-child">
+		Port D.
+	</div>
+	<div class="flex-child">
+		Port S.
+	</div>
+	<div class="flex-child">
+		Flags
+	</div>
+	<div class="flex-child" *ngFor="let i of [0,1,2,3,4,5,6,7,8,9]">
+		<select [(ngModel)]="responses[i]" (change)="grade()">
+			<option value="">[Select]</option>
+			<option *ngFor="let option of shuffleArray(question.options[i])" [value]="option">
+				{{ option }}
+			</option>
+		</select>
+	</div>
+	<div class="flex-child">
+		s
+	</div>
+	<div class="flex-child" *ngFor="let i of [10,11,12,13,14,15,16,17,18]">
+		<select [(ngModel)]="responses[i]" (change)="grade()">
+			<option value="">[Select]</option>
+			<option *ngFor="let option of shuffleArray(question.options[i])" [value]="option">
+				{{ option }}
+			</option>
+		</select>
+	</div>
+	<div class="flex-child">
+		s
+	</div>
+	<div class="flex-child" *ngFor="let i of [19,20,21,22,23,24,25,26,27]">
+		<select [(ngModel)]="responses[i]" (change)="grade()">
+			<option value="">[Select]</option>
+			<option *ngFor="let option of shuffleArray(question.options[i])" [value]="option">
+				{{ option }}
+			</option>
+		</select>
+	</div>
+	<div class="flex-child">
+		s
+	</div>
+	<div class="flex-child" *ngFor="let i of [28,29,30,31,32,33,34,35,36]">
+		<select [(ngModel)]="responses[i]" (change)="grade()">
+			<option value="">[Select]</option>
+			<option *ngFor="let option of shuffleArray(question.options[i])" [value]="option">
+				{{ option }}
+			</option>
+		</select>
+	</div>
+	<div class="flex-child">
+		s
+	</div>
+	<div class="flex-child" *ngFor="let i of [37,38,39,40,41,42,43,44,45]">
+		<select [(ngModel)]="responses[i]" (change)="grade()">
+			<option value="">[Select]</option>
+			<option *ngFor="let option of shuffleArray(question.options[i])" [value]="option">
+				{{ option }}
+			</option>
+		</select>
+	</div>
+</div>
