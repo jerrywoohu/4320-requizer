@@ -1,6 +1,6 @@
 <div class="content" role="main">
 
-    <section *ngIf="quiz_in_progress == 'none'">
+    <section *ngIf="quiz_in_progress == 'none'" class="constrained-content">
 
         <mat-card>
             <mat-card-header class="custom-offset-header">
@@ -22,8 +22,9 @@
                     </mat-form-field>
                     <button mat-button color="primary" (click)="formatTracingTable()">Create Table</button>
                     <mat-divider></mat-divider>
+                    <p *ngIf="packetTracingTable.table != ''">Use button at the bottom of the table to copy the raw table to your clipboard. You should then be able to paste the table directly into Piazza.</p>
                     <div class="pretty-table" id="packet-table">
-                        <table [innerHTML]="packetTracingTable.table"></table>
+                        <table [innerHTML]="packetTracingTable.table" border="1"></table>
                     </div>
                     <mat-divider></mat-divider>
                     <button mat-button color="primary" (click)="copyPacketTable()" *ngIf="packetTracingTable.table != ''">Copy Table to Clipboard</button>
@@ -171,13 +172,21 @@
         <app-learn [selected_modules]="selected_modules" [options]="options" (quiz_done)="quizDone($event, i)"></app-learn>
 
     </section>
+
         
-    <mat-expansion-panel class="mat-elevation-z background">
+    <mat-expansion-panel class="mat-elevation-z background constrained-content">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 Changelog
             </mat-panel-title>
         </mat-expansion-panel-header>
+        <h4>11/6/19 - Wide Edition</h4>
+        <ul>
+            <li>I'm temporarily making the quiz page full-width to make packet tracing questions easier to answer</li>
+            <li>If you don't see feature updates, delete your browsing data/empty your cache and try reloading</li>
+        </ul>
+        <mat-divider></mat-divider>
+
         <h4>11/3/19 - Dropdown Hell Edition</h4>
         <ul>
             <li>40, 46, 50-blank packet tracing questions now display as a table</li>

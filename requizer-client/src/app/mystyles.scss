@@ -1,6 +1,11 @@
 .content {
     margin: 0 auto;
     padding: 8px 8px 24px 8px;
+    // max-width: 720px;
+}
+
+.constrained-content {
+    margin: 0 auto;
     max-width: 720px;
 }
 

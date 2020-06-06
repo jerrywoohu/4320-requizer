@@ -19,8 +19,10 @@ In short,
 * Open each module page 
 * Right-click > "Save As...". 
 * Format: "Webpage, HTML Only". 
-* Save each video and attempt into ```/quizzes/quiz_name.htm``` . The name you save as does not really matter.
+* Save each video and attempt into ```/quizzes/quiz_name.htm``` .
 IMPORTANT: For each module you want to use, you MUST save the attempt recorded on the Module page. DO NOT save just Attempt View pages. 
+* Quiz names prefixed with "_" (an underscore) will be added anonymously, stripping the contributor data from those question ids. 
+* Also save a copy of the list of modules from the "Modules" tab in Canvas. Name this "modules_page.htm". This will allow the module order in the requizzer to be displayed as it was on Canvas.
 
 * run ```npm install``` to install dependencies from inside the project directory.
 * then ```node injest``` this creates the quiz question database and organizes it

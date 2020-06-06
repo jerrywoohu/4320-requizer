@@ -115,7 +115,7 @@ export class ConfiguratorComponent implements OnInit {
     }
 
     let table = ''
-    table += '<tr><th>Seg.</th><th>MAC D.</th><th>MAC S.</th><th>Type</th><th>IP D.</th><th>IP S.</th><th>Prot #</th><th>Port D.</th><th>Port S.</th><th>Flags</th></tr>'
+    table += '<tr><td>Seg.</td><td>MAC D.</td><td>MAC S.</td><td>Type</td><td>IP D.</td><td>IP S.</td><td>Prot #</td><td>Port D.</td><td>Port S.</td><td>Flags</td></tr>'
     
     if (output.length == 50 || output.length == 40) {
       for (let i = 0; i < output.length / 10; i++) {
